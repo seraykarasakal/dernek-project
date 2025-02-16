@@ -1,0 +1,7 @@
+/backend/target
+/backend/.mvn
+/backend/.idea
+/frontend/node_modules
+/frontend/.vite
+/frontend/.idea
+/.DS_Store
