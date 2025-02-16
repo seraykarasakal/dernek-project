@@ -3,51 +3,114 @@ package com.dernek.controller;
 import com.dernek.model.Haber;
 import com.dernek.repository.HaberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
  
 import java.util.List;
+import java.util.Optional;
+ 
  
 @RestController
 @RequestMapping("/api/haberler")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:5173")
 public class HaberController {
  
     @Autowired
     private HaberRepository haberRepository;
  
-    
+    //Tüm haberleri getir
     @GetMapping
     public List<Haber> getHaberler() {
         return haberRepository.findAll();
     }
  
-    
+    //Yeni haber ekle
     @PostMapping
     public Haber yeniHaberEkle(@RequestBody Haber haber) {
         return haberRepository.save(haber);
     }
  
-
+    // Belirli bir haberi getir
     @GetMapping("/{id}")
     public Haber getHaberById(@PathVariable Long id) {
         return haberRepository.findById(id).orElse(null);
     }
+//     @GetMapping("/{id}")
+//     public ResponseEntity<?> getHaberById(@PathVariable("id") Long id) {
+//     try {
+//         Optional<Haber> haber = haberRepository.findById(id);
+//         if (haber.isPresent()) {
+//             return ResponseEntity.ok(haber.get());
+//         } else {
+//             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Haber bulunamadı: " + id);
+//         }
+//     } catch (Exception e) {
+//         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Hata: " + e.getMessage());
+//     }
+// }
+    // Haberi güncelle
+    // @PutMapping("/{id}")
+    // public Haber updateHaber(@PathVariable Long id, @RequestBody Haber haberDetay) {
+    //     Haber haber = haberRepository.findById(id).orElse(null);
+    //     if (haber != null) {
+    //         haber.setKonu(haberDetay.getKonu());
+    //         haber.setIcerik(haberDetay.getIcerik());
+    //         haber.setGecerlilikTarihi(haberDetay.getGecerlilikTarihi());
+    //         return haberRepository.save(haber);
+    //     }
+    //     return null;
+    // }
+    // @PutMapping("/{id}")
+    // public ResponseEntity<Haber> updateHaber(@PathVariable Long id, @RequestBody Haber guncelHaber) {
+    //     Optional<Haber> haberOpt = haberRepository.findById(id);
+    //     if (haberOpt.isPresent()) {
+    //         Haber haber = haberOpt.get();
+    //         haber.setKonu(guncelHaber.getKonu());
+    //         haber.setIcerik(guncelHaber.getIcerik());
+    //         haber.setGecerlilikTarihi(guncelHaber.getGecerlilikTarihi());
+    //         haberRepository.save(haber);
+    //         return ResponseEntity.ok(haber);
+    //     } else {
+    //         return ResponseEntity.notFound().build();
+    //     }
+    // }
  
     @PutMapping("/{id}")
-    public Haber updateHaber(@PathVariable Long id, @RequestBody Haber haberDetay) {
-        Haber haber = haberRepository.findById(id).orElse(null);
-        if (haber != null) {
-            haber.setKonu(haberDetay.getKonu());
-            haber.setIcerik(haberDetay.getIcerik());
-            haber.setGecerlilikTarihi(haberDetay.getGecerlilikTarihi());
-            return haberRepository.save(haber);
+    public ResponseEntity<Haber> updateHaber(@PathVariable Long id, @RequestBody Haber guncelHaber) {
+        Optional<Haber> haberOpt = haberRepository.findById(id);
+    
+        if (haberOpt.isPresent()) {
+            Haber haber = haberOpt.get();
+            haber.setKonu(guncelHaber.getKonu());
+            haber.setIcerik(guncelHaber.getIcerik());
+            haber.setGecerlilikTarihi(guncelHaber.getGecerlilikTarihi());
+    
+            haberRepository.save(haber);
+            return ResponseEntity.ok(haber);
+        } else {
+            return ResponseEntity.notFound().build();
         }
-        return null;
     }
- 
     
     @DeleteMapping("/{id}")
-    public void deleteHaber(@PathVariable Long id) {
-        haberRepository.deleteById(id);
+    public ResponseEntity<String> deleteHaber(@PathVariable Long id) {
+        if (!haberRepository.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Hata: Silinmek istenen haber bulunamadı!");
+        }
+       
+        try {
+            haberRepository.deleteById(id);
+            return ResponseEntity.ok("Haber başarıyla silindi.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Hata: Haber silinirken bir sorun oluştu! " + e.getMessage());
+        }
     }
+   
+ 
+ 
+   
 }

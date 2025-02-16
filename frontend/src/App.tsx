@@ -1,33 +1,18 @@
-import { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import AdminHaberler from "./pages/AdminHaberler";
+import AdminHaberEkle from "./pages/AdminHaberEkle";
 
 function App() {
-    const [haberler, setHaberler] = useState([]);
-    const [hata, setHata] = useState(null);
-
-    useEffect(() => {
-        fetch("/api/haberler")
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Bağlantı hatası");
-                }
-                return response.json();
-            })
-            .then((data) => setHaberler(data))
-            .catch((error) => setHata(error.message));
-    }, []);
-
     return (
-        <div>
-            <h1>Haberler</h1>
-            {hata && <p style={{ color: "red" }}>Hata: {hata}</p>}
-            <ul>
-                {haberler.map((haber, index) => (
-                    <li key={index}>
-                        {haber.konu} - {haber.icerik}
-                    </li>
-                ))}
-            </ul>
-        </div>
+        <Router>
+            <div className="container mt-3">
+                <h1>Admin Panel</h1>
+                <Routes>
+                    <Route path="/admin/haberler" element={<AdminHaberler />} />
+                    <Route path="/admin/haber-ekle" element={<AdminHaberEkle />} />
+                </Routes>
+            </div>
+        </Router>
     );
 }
 
