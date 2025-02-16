@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
     @GetMapping
     public String test() {
-        return "Spring Boot Calisiyor!";
+        return "Spring Boot deneme";
     }
 }
