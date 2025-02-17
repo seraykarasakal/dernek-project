@@ -37,45 +37,6 @@ public class HaberController {
     public Haber getHaberById(@PathVariable Long id) {
         return haberRepository.findById(id).orElse(null);
     }
-//     @GetMapping("/{id}")
-//     public ResponseEntity<?> getHaberById(@PathVariable("id") Long id) {
-//     try {
-//         Optional<Haber> haber = haberRepository.findById(id);
-//         if (haber.isPresent()) {
-//             return ResponseEntity.ok(haber.get());
-//         } else {
-//             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Haber bulunamadı: " + id);
-//         }
-//     } catch (Exception e) {
-//         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Hata: " + e.getMessage());
-//     }
-// }
-    // Haberi güncelle
-    // @PutMapping("/{id}")
-    // public Haber updateHaber(@PathVariable Long id, @RequestBody Haber haberDetay) {
-    //     Haber haber = haberRepository.findById(id).orElse(null);
-    //     if (haber != null) {
-    //         haber.setKonu(haberDetay.getKonu());
-    //         haber.setIcerik(haberDetay.getIcerik());
-    //         haber.setGecerlilikTarihi(haberDetay.getGecerlilikTarihi());
-    //         return haberRepository.save(haber);
-    //     }
-    //     return null;
-    // }
-    // @PutMapping("/{id}")
-    // public ResponseEntity<Haber> updateHaber(@PathVariable Long id, @RequestBody Haber guncelHaber) {
-    //     Optional<Haber> haberOpt = haberRepository.findById(id);
-    //     if (haberOpt.isPresent()) {
-    //         Haber haber = haberOpt.get();
-    //         haber.setKonu(guncelHaber.getKonu());
-    //         haber.setIcerik(guncelHaber.getIcerik());
-    //         haber.setGecerlilikTarihi(guncelHaber.getGecerlilikTarihi());
-    //         haberRepository.save(haber);
-    //         return ResponseEntity.ok(haber);
-    //     } else {
-    //         return ResponseEntity.notFound().build();
-    //     }
-    // }
  
     @PutMapping("/{id}")
     public ResponseEntity<Haber> updateHaber(@PathVariable Long id, @RequestBody Haber guncelHaber) {
@@ -93,6 +54,7 @@ public class HaberController {
             return ResponseEntity.notFound().build();
         }
     }
+    
     
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteHaber(@PathVariable Long id) {
