@@ -34,6 +34,22 @@ function AdminDuyurular() {
     };
 
     // Güncelleme İşlemi
+    // const handleUpdate = (e) => {
+    //     e.preventDefault();
+    //     if (!seciliDuyuru) return;
+
+    //     fetch(`http://localhost:9090/api/duyurular/${seciliDuyuru.id}`, {
+    //         method: "PUT",
+    //         headers: { "Content-Type": "application/json" },
+    //         body: JSON.stringify(seciliDuyuru),
+    //     })
+    //         .then((response) => response.json())
+    //         .then((updatedDuyuru) => {
+    //             setDuyurular(duyurular.map((duyuru) => (duyuru.id === updatedDuyuru.id ? updatedDuyuru : duyuru)));
+    //             handleClose();
+    //         })
+    //         .catch((error) => setHata(error.message));
+    // };
     const handleUpdate = (e) => {
         e.preventDefault();
         if (!seciliDuyuru) return;
@@ -41,14 +57,24 @@ function AdminDuyurular() {
         fetch(`http://localhost:9090/api/duyurular/${seciliDuyuru.id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(seciliDuyuru),
+            body: JSON.stringify({
+                baslik: seciliDuyuru.baslik,
+                icerik: seciliDuyuru.icerik,
+                gecerlilikTarihi: seciliDuyuru.gecerlilikTarihi,
+                resimUrl: seciliDuyuru.resimUrl, // Eğer değiştirilmişse
+            }),
         })
-            .then((response) => response.json())
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`Hata: ${response.status}`);
+                }
+                return response.json();
+            })
             .then((updatedDuyuru) => {
                 setDuyurular(duyurular.map((duyuru) => (duyuru.id === updatedDuyuru.id ? updatedDuyuru : duyuru)));
                 handleClose();
             })
-            .catch((error) => setHata(error.message));
+            .catch((error) => setHata(`Güncelleme hatası: ${error.message}`));
     };
 
     // Silme Modalını Açma

@@ -3,7 +3,7 @@ package com.dernek.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "duyurular") // Duyurular için tablo adı
+@Table(name = "duyurular") 
 public class Duyuru {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -11,7 +11,6 @@ public class Duyuru {
 
     @Column(nullable = false)
     private String baslik; 
-
     @Column(nullable = false)
     private String icerik;
 
@@ -19,9 +18,8 @@ public class Duyuru {
     private String gecerlilikTarihi;
 
     @Column(name = "resim_url") 
-    private String resimUrl;
+    private String resimUrl; // Base64 veya Dosya Yolu
 
-    // Getter - Setter
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
