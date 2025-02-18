@@ -50,6 +50,35 @@ function AdminDuyurular() {
     //         })
     //         .catch((error) => setHata(error.message));
     // };
+
+    //resim güncelleme eklenmeden önce doğru çalışan güncelleme işlemi
+    // const handleUpdate = (e) => {
+    //     e.preventDefault();
+    //     if (!seciliDuyuru) return;
+
+    //     fetch(`http://localhost:9090/api/duyurular/${seciliDuyuru.id}`, {
+    //         method: "PUT",
+    //         headers: { "Content-Type": "application/json" },
+    //         body: JSON.stringify({
+    //             baslik: seciliDuyuru.baslik,
+    //             icerik: seciliDuyuru.icerik,
+    //             gecerlilikTarihi: seciliDuyuru.gecerlilikTarihi,
+    //             resimUrl: seciliDuyuru.resimUrl, // Eğer değiştirilmişse
+    //         }),
+    //     })
+    //         .then((response) => {
+    //             if (!response.ok) {
+    //                 throw new Error(`Hata: ${response.status}`);
+    //             }
+    //             return response.json();
+    //         })
+    //         .then((updatedDuyuru) => {
+    //             setDuyurular(duyurular.map((duyuru) => (duyuru.id === updatedDuyuru.id ? updatedDuyuru : duyuru)));
+    //             handleClose();
+    //         })
+    //         .catch((error) => setHata(`Güncelleme hatası: ${error.message}`));
+    // };
+
     const handleUpdate = (e) => {
         e.preventDefault();
         if (!seciliDuyuru) return;
@@ -57,16 +86,11 @@ function AdminDuyurular() {
         fetch(`http://localhost:9090/api/duyurular/${seciliDuyuru.id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                baslik: seciliDuyuru.baslik,
-                icerik: seciliDuyuru.icerik,
-                gecerlilikTarihi: seciliDuyuru.gecerlilikTarihi,
-                resimUrl: seciliDuyuru.resimUrl, // Eğer değiştirilmişse
-            }),
+            body: JSON.stringify(seciliDuyuru),
         })
             .then((response) => {
                 if (!response.ok) {
-                    throw new Error(`Hata: ${response.status}`);
+                    throw new Error(`Güncelleme başarısız! HTTP Status: ${response.status}`);
                 }
                 return response.json();
             })
@@ -75,6 +99,18 @@ function AdminDuyurular() {
                 handleClose();
             })
             .catch((error) => setHata(`Güncelleme hatası: ${error.message}`));
+    };
+
+    // Yeni Resim Seçildiğinde Base64'e Çeviren Fonksiyon
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+            setSeciliDuyuru({ ...seciliDuyuru, resimUrl: reader.result.split(",")[1] });
+        };
     };
 
     // Silme Modalını Açma
@@ -150,6 +186,25 @@ function AdminDuyurular() {
                                     required
                                 />
                             </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Geçerlilik Tarihi</Form.Label>
+                                <Form.Control
+                                    type="date"
+                                    value={seciliDuyuru.gecerlilikTarihi}
+                                    onChange={(e) =>
+                                        setSeciliDuyuru({
+                                            ...seciliDuyuru,
+                                            gecerlilikTarihi: e.target.value,
+                                        })
+                                    }
+                                    required
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Yeni Resim (Opsiyonel)</Form.Label>
+                                <Form.Control type="file" accept="image/*" onChange={(e) => handleImageChange(e)} />
+                            </Form.Group>
+
                             <Button variant="success" type="submit">
                                 Güncelle
                             </Button>

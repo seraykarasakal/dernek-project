@@ -18,7 +18,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/duyurular")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+// @RestController
+// @RequestMapping("/api/duyurular")
+// @CrossOrigin(origins = "http://localhost:5173")
 public class DuyuruController {
 
     private static final String UPLOAD_DIR = "uploads/";
@@ -31,8 +34,27 @@ public class DuyuruController {
     public List<Duyuru> getDuyurular() {
         return duyuruRepository.findAll();
     }
+//doğru çalışan güncelleme
+//     @PutMapping("/{id}")
+// public ResponseEntity<Duyuru> updateDuyuru(@PathVariable Long id, @RequestBody Duyuru guncelDuyuru) {
+//     Optional<Duyuru> duyuruOpt = duyuruRepository.findById(id);
 
-    @PutMapping("/{id}")
+//     if (duyuruOpt.isPresent()) {
+//         Duyuru duyuru = duyuruOpt.get();
+//         duyuru.setBaslik(guncelDuyuru.getBaslik());
+//         duyuru.setIcerik(guncelDuyuru.getIcerik());
+//         duyuru.setGecerlilikTarihi(guncelDuyuru.getGecerlilikTarihi());
+//         duyuru.setResimUrl(guncelDuyuru.getResimUrl()); // Eğer güncellenmesi gerekiyorsa
+
+//         duyuruRepository.save(duyuru);
+//         return ResponseEntity.ok(duyuru);
+//     } else {
+//         return ResponseEntity.notFound().build();
+//     }
+// }
+
+
+@PutMapping("/{id}")
 public ResponseEntity<Duyuru> updateDuyuru(@PathVariable Long id, @RequestBody Duyuru guncelDuyuru) {
     Optional<Duyuru> duyuruOpt = duyuruRepository.findById(id);
 
@@ -41,7 +63,40 @@ public ResponseEntity<Duyuru> updateDuyuru(@PathVariable Long id, @RequestBody D
         duyuru.setBaslik(guncelDuyuru.getBaslik());
         duyuru.setIcerik(guncelDuyuru.getIcerik());
         duyuru.setGecerlilikTarihi(guncelDuyuru.getGecerlilikTarihi());
-        duyuru.setResimUrl(guncelDuyuru.getResimUrl()); // Eğer güncellenmesi gerekiyorsa
+
+        // Eğer yeni bir resim gelirse, eskiyi silip yenisini ekle
+        if (guncelDuyuru.getResimUrl() != null && !guncelDuyuru.getResimUrl().isEmpty()) {
+            // Eski dosyayı sil
+            if (duyuru.getResimUrl() != null) {
+                File eskiDosya = new File(duyuru.getResimUrl());
+                if (eskiDosya.exists()) {
+                    eskiDosya.delete();
+                }
+            }
+
+            // Yeni resmi kaydet
+            try {
+                byte[] imageBytes = Base64.getDecoder().decode(guncelDuyuru.getResimUrl());
+                String fileName = System.currentTimeMillis() + ".png";
+                String filePath = "uploads/" + fileName;
+
+                // uploads klasörü yoksa oluştur
+                File uploadDir = new File("uploads/");
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdirs();
+                }
+
+                // Dosyayı kaydet
+                try (OutputStream os = new FileOutputStream(filePath)) {
+                    os.write(imageBytes);
+                }
+
+                duyuru.setResimUrl(filePath);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(null);
+            }
+        }
 
         duyuruRepository.save(duyuru);
         return ResponseEntity.ok(duyuru);
@@ -49,6 +104,7 @@ public ResponseEntity<Duyuru> updateDuyuru(@PathVariable Long id, @RequestBody D
         return ResponseEntity.notFound().build();
     }
 }
+
 
 @DeleteMapping("/{id}")
 public ResponseEntity<String> deleteDuyuru(@PathVariable Long id) {
