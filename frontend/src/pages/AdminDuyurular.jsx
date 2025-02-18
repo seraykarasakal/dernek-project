@@ -146,7 +146,7 @@ function AdminDuyurular() {
             <ul className="list-group">
                 {duyurular.map((duyuru) => (
                     <li key={duyuru.id} className="list-group-item d-flex justify-content-between align-items-center">
-                        {duyuru.baslik} - {duyuru.icerik}
+                        {duyuru.konu} - {duyuru.icerik}
                         <div>
                             <Button variant="primary" onClick={() => handleShow(duyuru)}>
                                 Güncelle
@@ -171,8 +171,8 @@ function AdminDuyurular() {
                                 <Form.Label>Başlık</Form.Label>
                                 <Form.Control
                                     type="text"
-                                    value={seciliDuyuru.baslik}
-                                    onChange={(e) => setSeciliDuyuru({ ...seciliDuyuru, baslik: e.target.value })}
+                                    value={seciliDuyuru.konu}
+                                    onChange={(e) => setSeciliDuyuru({ ...seciliDuyuru, konu: e.target.value })}
                                     required
                                 />
                             </Form.Group>

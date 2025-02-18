@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Form } from "react-bootstrap";
 
 function AdminDuyuruEkle() {
-    const [baslik, setBaslik] = useState("");
+    const [konu, setKonu] = useState("");
     const [icerik, setIcerik] = useState("");
     const [gecerlilikTarihi, setGecerlilikTarihi] = useState("");
     const [resim, setResim] = useState(null);
@@ -28,7 +28,7 @@ function AdminDuyuruEkle() {
         }
 
         const duyuruData = {
-            baslik: baslik,
+            konu: konu,
             icerik: icerik,
             gecerlilikTarihi: gecerlilikTarihi,
             resimUrl: base64Image, // Base64 formatında resim
@@ -58,8 +58,8 @@ function AdminDuyuruEkle() {
             <h2>Yeni Duyuru Ekle</h2>
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3">
-                    <Form.Label>Başlık</Form.Label>
-                    <Form.Control type="text" value={baslik} onChange={(e) => setBaslik(e.target.value)} required />
+                    <Form.Label>Konu</Form.Label>
+                    <Form.Control type="text" value={konu} onChange={(e) => setKonu(e.target.value)} required />
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label>İçerik</Form.Label>

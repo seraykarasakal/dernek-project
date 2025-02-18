@@ -2,6 +2,7 @@
 package com.dernek.controller;
 
 import com.dernek.model.Duyuru;
+import com.dernek.model.Haber;
 import com.dernek.repository.DuyuruRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,11 +30,18 @@ public class DuyuruController {
     @Autowired
     private DuyuruRepository duyuruRepository;
 
-    // Tüm duyuruları getir
-    @GetMapping
-    public List<Duyuru> getDuyurular() {
-        return duyuruRepository.findAll();
+    //Tüm duyuruları getir
+     @GetMapping
+     public List<Duyuru> getDuyurular() {
+         return duyuruRepository.findAll();
     }
+    @GetMapping("/{id}")
+    public Duyuru getDuyuruById(@PathVariable Long id) {
+        return duyuruRepository.findById(id).orElse(null);
+    }
+
+    
+
 //doğru çalışan güncelleme
 //     @PutMapping("/{id}")
 // public ResponseEntity<Duyuru> updateDuyuru(@PathVariable Long id, @RequestBody Duyuru guncelDuyuru) {
@@ -60,7 +68,7 @@ public ResponseEntity<Duyuru> updateDuyuru(@PathVariable Long id, @RequestBody D
 
     if (duyuruOpt.isPresent()) {
         Duyuru duyuru = duyuruOpt.get();
-        duyuru.setBaslik(guncelDuyuru.getBaslik());
+        duyuru.setKonu(guncelDuyuru.getKonu());
         duyuru.setIcerik(guncelDuyuru.getIcerik());
         duyuru.setGecerlilikTarihi(guncelDuyuru.getGecerlilikTarihi());
 
