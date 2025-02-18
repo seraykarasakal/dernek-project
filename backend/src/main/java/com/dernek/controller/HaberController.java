@@ -25,19 +25,25 @@ public class HaberController {
     public List<Haber> getHaberler() {
         return haberRepository.findAll();
     }
- 
-    //Yeni haber ekle
+
     @PostMapping
-    public Haber yeniHaberEkle(@RequestBody Haber haber) {
-        return haberRepository.save(haber);
+public ResponseEntity<Haber> yeniHaberEkle(@RequestBody Haber haber) {
+    try {
+        System.out.println("Gelen Haber Linki: " + haber.getLink()); // Link geliyor mu kontrol edin
+
+        Haber kaydedilenHaber = haberRepository.save(haber);
+        return ResponseEntity.ok(kaydedilenHaber);
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
- 
+}
+
     // Belirli bir haberi getir
     @GetMapping("/{id}")
     public Haber getHaberById(@PathVariable Long id) {
         return haberRepository.findById(id).orElse(null);
     }
- 
+
     @PutMapping("/{id}")
     public ResponseEntity<Haber> updateHaber(@PathVariable Long id, @RequestBody Haber guncelHaber) {
         Optional<Haber> haberOpt = haberRepository.findById(id);
@@ -47,14 +53,14 @@ public class HaberController {
             haber.setKonu(guncelHaber.getKonu());
             haber.setIcerik(guncelHaber.getIcerik());
             haber.setGecerlilikTarihi(guncelHaber.getGecerlilikTarihi());
-    
+            haber.setLink(guncelHaber.getLink());  
+
             haberRepository.save(haber);
             return ResponseEntity.ok(haber);
         } else {
             return ResponseEntity.notFound().build();
         }
     }
-    
     
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteHaber(@PathVariable Long id) {
@@ -71,8 +77,4 @@ public class HaberController {
                     .body("Hata: Haber silinirken bir sorun oluştu! " + e.getMessage());
         }
     }
-   
- 
- 
-   
 }

@@ -18,6 +18,9 @@ public class Haber {
     @Column(name = "gecerlilik_tarihi")
     private String gecerlilikTarihi;
  
+    @Column(name = "haber_linki")  
+    private String link;
+
     // Getter - Setter
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -30,4 +33,8 @@ public class Haber {
  
     public String getGecerlilikTarihi() { return gecerlilikTarihi; }
     public void setGecerlilikTarihi(String gecerlilikTarihi) { this.gecerlilikTarihi = gecerlilikTarihi; }
+
+    public String getLink() { return link; }
+    public void setLink(String link) { this.link = link; }
+
 }

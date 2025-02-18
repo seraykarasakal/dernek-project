@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function AdminHaberEkle() {
     const [konu, setKonu] = useState("");
     const [icerik, setIcerik] = useState("");
     const [gecerlilikTarihi, setGecerlilikTarihi] = useState("");
-    const [haberLinki, setHaberLinki] = useState("");
+    const [link, setHaberLinki] = useState("");
     const [mesaj, setMesaj] = useState(null);
 
     const handleSubmit = async (e) => {
@@ -14,7 +15,7 @@ function AdminHaberEkle() {
             konu,
             icerik,
             gecerlilikTarihi,
-            haberLinki,
+            link,
         };
 
         try {
@@ -23,7 +24,7 @@ function AdminHaberEkle() {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(yeniHaber),
+                body: JSON.stringify({ konu, icerik, gecerlilikTarihi, link }), // Link de gönderiliyor
             });
 
             if (response.ok) {
@@ -63,7 +64,7 @@ function AdminHaberEkle() {
 
                 <div className="mb-3">
                     <label className="form-label">Haber Linki:</label>
-                    <input type="text" className="form-control" value={haberLinki} onChange={(e) => setHaberLinki(e.target.value)} />
+                    <input type="text" className="form-control" value={link} onChange={(e) => setHaberLinki(e.target.value)} />
                 </div>
 
                 <button type="submit" className="btn btn-primary">
