@@ -32,61 +32,20 @@ function AdminDuyurular() {
         setShow(false);
         setSeciliDuyuru(null);
     };
-
-    // Güncelleme İşlemi
-    // const handleUpdate = (e) => {
-    //     e.preventDefault();
-    //     if (!seciliDuyuru) return;
-
-    //     fetch(`http://localhost:9090/api/duyurular/${seciliDuyuru.id}`, {
-    //         method: "PUT",
-    //         headers: { "Content-Type": "application/json" },
-    //         body: JSON.stringify(seciliDuyuru),
-    //     })
-    //         .then((response) => response.json())
-    //         .then((updatedDuyuru) => {
-    //             setDuyurular(duyurular.map((duyuru) => (duyuru.id === updatedDuyuru.id ? updatedDuyuru : duyuru)));
-    //             handleClose();
-    //         })
-    //         .catch((error) => setHata(error.message));
-    // };
-
-    //resim güncelleme eklenmeden önce doğru çalışan güncelleme işlemi
-    // const handleUpdate = (e) => {
-    //     e.preventDefault();
-    //     if (!seciliDuyuru) return;
-
-    //     fetch(`http://localhost:9090/api/duyurular/${seciliDuyuru.id}`, {
-    //         method: "PUT",
-    //         headers: { "Content-Type": "application/json" },
-    //         body: JSON.stringify({
-    //             baslik: seciliDuyuru.baslik,
-    //             icerik: seciliDuyuru.icerik,
-    //             gecerlilikTarihi: seciliDuyuru.gecerlilikTarihi,
-    //             resimUrl: seciliDuyuru.resimUrl, // Eğer değiştirilmişse
-    //         }),
-    //     })
-    //         .then((response) => {
-    //             if (!response.ok) {
-    //                 throw new Error(`Hata: ${response.status}`);
-    //             }
-    //             return response.json();
-    //         })
-    //         .then((updatedDuyuru) => {
-    //             setDuyurular(duyurular.map((duyuru) => (duyuru.id === updatedDuyuru.id ? updatedDuyuru : duyuru)));
-    //             handleClose();
-    //         })
-    //         .catch((error) => setHata(`Güncelleme hatası: ${error.message}`));
-    // };
-
     const handleUpdate = (e) => {
         e.preventDefault();
         if (!seciliDuyuru) return;
 
+        // Eğer yeni resim seçilmemişse, eski resmi koru
+        const updatedDuyuru = {
+            ...seciliDuyuru,
+            resimUrl: seciliDuyuru.resimUrl ? seciliDuyuru.resimUrl : seciliDuyuru.eskiResimUrl,
+        };
+
         fetch(`http://localhost:9090/api/duyurular/${seciliDuyuru.id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(seciliDuyuru),
+            body: JSON.stringify(updatedDuyuru),
         })
             .then((response) => {
                 if (!response.ok) {
@@ -145,9 +104,24 @@ function AdminDuyurular() {
             {hata && <p style={{ color: "red" }}>Hata: {hata}</p>}
             <ul className="list-group">
                 {duyurular.map((duyuru) => (
-                    <li key={duyuru.id} className="list-group-item d-flex justify-content-between align-items-center">
-                        {duyuru.konu} - {duyuru.icerik}
+                    <li key={duyuru.id} className="list-group-item d-flex flex-column justify-content-between align-items-start">
+                        {duyuru.konu}
                         <div>
+                            {duyuru.icerik}
+                            <div>
+                                <img
+                                    src={`http://localhost:9090/api/duyurular/uploads/${duyuru.resimUrl.split("/").pop()}`}
+                                    alt="Duyuru Resmi"
+                                    style={{
+                                        width: "200px", // Genişliği 200px olarak ayarladık
+                                        height: "150px", // Yüksekliği 150px olarak ayarladık
+                                        objectFit: "cover", // Resmi kesmeden, uygun şekilde ortalar
+                                        borderRadius: "10px", // Köşeleri yuvarlattık
+                                        display: "block", // Ortalamak için gerekli
+                                        margin: "0 auto", // Ortalamak için gerekli
+                                    }}
+                                />
+                            </div>
                             <Button variant="primary" onClick={() => handleShow(duyuru)}>
                                 Güncelle
                             </Button>{" "}
@@ -200,6 +174,7 @@ function AdminDuyurular() {
                                     required
                                 />
                             </Form.Group>
+
                             <Form.Group className="mb-3">
                                 <Form.Label>Yeni Resim (Opsiyonel)</Form.Label>
                                 <Form.Control type="file" accept="image/*" onChange={(e) => handleImageChange(e)} />

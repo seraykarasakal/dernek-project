@@ -69,10 +69,9 @@ function AdminDuyuruEkle() {
                     <Form.Label>Geçerlilik Tarihi</Form.Label>
                     <Form.Control type="date" value={gecerlilikTarihi} onChange={(e) => setGecerlilikTarihi(e.target.value)} required />
                 </Form.Group>
-
                 <Form.Group className="mb-3">
-                    <Form.Label>Resim Seç</Form.Label>
-                    <Form.Control type="file" accept="image/jpeg, image/png, image/webp" onChange={(e) => setResim(e.target.files[0])} />
+                    <Form.Label>Resim Seç </Form.Label>
+                    <Form.Control type="file" accept="image/jpeg, image/png, image/webp" onChange={(e) => setResim(e.target.files[0])} required />
                 </Form.Group>
                 <Button variant="success" type="submit">
                     Ekle

@@ -3,6 +3,7 @@ import AdminHaberler from "./pages/AdminHaberler";
 import AdminHaberEkle from "./pages/AdminHaberEkle";
 import AdminDuyurular from "./pages/AdminDuyurular";
 import AdminDuyuruEkle from "./pages/AdminDuyuruEkle";
+import UserDashboard from "./pages/UserDashboard";
 // Eksik import eklendi
 function App() {
     return (
@@ -14,6 +15,7 @@ function App() {
                     <Route path="/admin/haber-ekle" element={<AdminHaberEkle />} />
                     <Route path="/admin/duyurular" element={<AdminDuyurular />} />
                     <Route path="/admin/duyuru-ekle" element={<AdminDuyuruEkle />} />
+                    <Route path="/" element={<UserDashboard />} />
                 </Routes>
             </div>
         </Router>
