@@ -26,9 +26,6 @@ function UserHaberler() {
     // Eğer veri yükleniyorsa veya hata varsa gösterelim
     if (loading) return <div>Yükleniyor...</div>;
     if (error) return <div>Hata: {error}</div>;
-    console.log("Haberler:", haberler);
-    console.log("Loading:", loading);
-    console.log("Error:", error);
 
     return (
         <>

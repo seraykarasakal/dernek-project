@@ -55,7 +55,7 @@ const Header = ({ title, buttons, subTitle }) => {
                     borderBottom: "1px solid #e0e0e0",
                     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
                     position: "fixed",
-                    top: "70px", // Header'ın hemen altında
+                    top: "70px",
                     zIndex: 999,
                 }}
             >
@@ -64,7 +64,7 @@ const Header = ({ title, buttons, subTitle }) => {
                         margin: 0,
                         fontSize: "20px",
                         fontWeight: "600",
-                        textAlign: "left", // Sola hizalanmış
+                        textAlign: "left",
                     }}
                 >
                     {subTitle}
@@ -72,7 +72,7 @@ const Header = ({ title, buttons, subTitle }) => {
             </div>
 
             {/* Altındaki Sayfanın Başlangıç Noktası */}
-            <div style={{ paddingTop: "120px" }}>{/* Header (70px) + SubHeader (50px) = 120px */}</div>
+            <div style={{ paddingTop: "120px" }}></div>
         </>
     );
 };

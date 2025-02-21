@@ -239,15 +239,3 @@ function AdminDuyurular() {
 }
 
 export default AdminDuyurular;
-{
-    /* <div className="d-flex flex-column justify-content-center align-items-end gap-2 p-2">
-                                    <div className="d-flex gap-2">
-                                        <Button variant="outline-primary" onClick={() => handleShow(duyuru)}>
-                                            <i className="bi bi-pencil-fill"></i> Güncelle
-                                        </Button>
-                                        <Button variant="outline-danger" onClick={() => handleShowDelete(duyuru)}>
-                                            <i className="bi bi-trash-fill"></i> Sil
-                                        </Button>
-                                    </div>
-                                </div> */
-}
