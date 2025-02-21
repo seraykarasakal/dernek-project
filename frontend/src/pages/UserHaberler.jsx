@@ -1,19 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, Card, Modal } from "react-bootstrap";
 import Header from "../components/Header";
-
+import useFetch from "../hooks/useFetch";
 function UserHaberler() {
-    const [haberler, setHaberler] = useState([]);
+    // Custom Hook'u kullanarak veriyi çekiyoruz
+    const { data: haberler, loading, error } = useFetch("http://localhost:9090/api/haberler");
     const [seciliHaber, setSeciliHaber] = useState(null);
     const [show, setShow] = useState(false);
-
-    // Haberler için API'den verileri çek
-    useEffect(() => {
-        fetch("http://localhost:9090/api/haberler")
-            .then((response) => response.json())
-            .then((data) => setHaberler(data))
-            .catch((error) => console.error("Haberler alınırken hata oluştu", error));
-    }, []);
 
     // Modal Açma Fonksiyonu
     const handleShow = (haber) => {
@@ -26,7 +19,17 @@ function UserHaberler() {
         setShow(false);
         setSeciliHaber(null);
     };
+
+    // Header için butonlar
     const buttons = [{ label: "Duyurular", variant: "success", link: "/user/duyurular" }];
+
+    // Eğer veri yükleniyorsa veya hata varsa gösterelim
+    if (loading) return <div>Yükleniyor...</div>;
+    if (error) return <div>Hata: {error}</div>;
+    console.log("Haberler:", haberler);
+    console.log("Loading:", loading);
+    console.log("Error:", error);
+
     return (
         <>
             <Header title="Haberler" buttons={buttons} />
@@ -39,7 +42,7 @@ function UserHaberler() {
                                     <Card.Title>{haber.konu}</Card.Title>
                                     <Card.Text style={{ maxHeight: "100px", overflow: "hidden" }}>{haber.icerik}</Card.Text>
                                     <Card.Text className="text-muted">{haber.gecerlilikTarihi}</Card.Text>
-                                    <Button variant="primary" onClick={() => handleShow(haber)}>
+                                    <Button variant="outline-primary" onClick={() => handleShow(haber)}>
                                         Detay
                                     </Button>
                                 </Card.Body>

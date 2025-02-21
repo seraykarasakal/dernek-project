@@ -118,7 +118,7 @@ function AdminDuyurular() {
                                     className="card shadow-sm "
                                     style={{
                                         width: "%40",
-                                        height: "500px",
+                                        height: "450px",
                                         overflow: "hidden",
                                     }}
                                 >
@@ -161,38 +161,7 @@ function AdminDuyurular() {
                         ))}
                     </div>
                 </div>
-                {/* <h2>Duyurular</h2>
-            {hata && <p style={{ color: "red" }}>Hata: {hata}</p>}
-            <ul className="list-group">
-                {duyurular.map((duyuru) => (
-                    <li key={duyuru.id} className="list-group-item d-flex flex-column justify-content-between align-items-start">
-                        {duyuru.konu}
-                        <div>
-                            {duyuru.icerik}
-                            <div>
-                                <img
-                                    src={`http://localhost:9090/api/duyurular/uploads/${duyuru.resimUrl.split("/").pop()}`}
-                                    alt="Duyuru Resmi"
-                                    style={{
-                                        width: "200px", // Genişliği 200px olarak ayarladık
-                                        height: "150px", // Yüksekliği 150px olarak ayarladık
-                                        objectFit: "cover", // Resmi kesmeden, uygun şekilde ortalar
-                                        borderRadius: "10px", // Köşeleri yuvarlattık
-                                        display: "block", // Ortalamak için gerekli
-                                        margin: "0 auto", // Ortalamak için gerekli
-                                    }}
-                                />
-                            </div>
-                            <Button variant="primary" onClick={() => handleShow(duyuru)}>
-                                Güncelle
-                            </Button>{" "}
-                            <Button variant="danger" onClick={() => handleShowDelete(duyuru)}>
-                                Sil
-                            </Button>
-                        </div>
-                    </li>
-                ))}
-            </ul> */}
+
                 {/* Güncelleme Modalı */}
                 <Modal show={show} onHide={handleClose}>
                     <Modal.Header closeButton>

@@ -93,7 +93,14 @@ function AdminHaberler() {
                     <div className="row">
                         {haberler.map((haber) => (
                             <div key={haber.id} className=" col-md-6 col-lg-4 mb-4">
-                                <div className="card shadow-sm h-100">
+                                <div
+                                    className="card shadow-sm "
+                                    style={{
+                                        width: "%40",
+                                        height: "300px",
+                                        overflow: "hidden",
+                                    }}
+                                >
                                     <div className="card-body">
                                         <h5 className="card-title">{haber.konu}</h5>
                                         <p className="card-text">{haber.icerik}</p>

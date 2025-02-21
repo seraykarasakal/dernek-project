@@ -1,19 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button, Card, Modal } from "react-bootstrap";
 import Header from "../components/Header";
+import useFetch from "../hooks/useFetch";
 
 function UserDuyurular() {
-    const [duyurular, setDuyurular] = useState([]);
+    // Custom Hook'u kullanarak veriyi çekiyoruz
+    const { data: duyurular, loading, error } = useFetch("http://localhost:9090/api/duyurular");
     const [seciliDuyuru, setSeciliDuyuru] = useState(null);
     const [show, setShow] = useState(false);
-
-    // Duyurular için API'den verileri çek
-    useEffect(() => {
-        fetch("http://localhost:9090/api/duyurular")
-            .then((response) => response.json())
-            .then((data) => setDuyurular(data))
-            .catch((error) => console.error("Duyurular alınırken hata oluştu", error));
-    }, []);
 
     // Modal Açma Fonksiyonu
     const handleShow = (duyuru) => {
@@ -26,7 +20,13 @@ function UserDuyurular() {
         setShow(false);
         setSeciliDuyuru(null);
     };
+
+    // Header için butonlar
     const buttons = [{ label: "Haberler", variant: "primary", link: "/user/haberler" }];
+
+    // Eğer veri yükleniyorsa veya hata varsa gösterelim
+    if (loading) return <div>Yükleniyor...</div>;
+    if (error) return <div>Hata: {error}</div>;
 
     return (
         <>
@@ -51,7 +51,7 @@ function UserDuyurular() {
                                     <Card.Title>{duyuru.konu}</Card.Title>
                                     <Card.Text style={{ maxHeight: "100px", overflow: "hidden" }}>{duyuru.icerik}</Card.Text>
                                     <Card.Text className="text-muted">{duyuru.gecerlilikTarihi}</Card.Text>
-                                    <Button variant="success" onClick={() => handleShow(duyuru)}>
+                                    <Button variant="outline-success" onClick={() => handleShow(duyuru)}>
                                         Detay
                                     </Button>
                                 </Card.Body>
