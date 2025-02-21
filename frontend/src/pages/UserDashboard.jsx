@@ -76,13 +76,6 @@ function UserDashboard() {
                             <strong>Geçerlilik Tarihi:</strong> {seciliEtkinlik?.gecerlilikTarihi}
                         </p>
                     )}
-                    {seciliEtkinlik?.link && (
-                        <p>
-                            <a href={seciliEtkinlik?.link} target="_blank" rel="noopener noreferrer">
-                                Haberi Gör
-                            </a>
-                        </p>
-                    )}
 
                     {seciliEtkinlik?.resimUrl && (
                         <p>

@@ -85,31 +85,11 @@ function AdminHaberler() {
             <h2>Haberler</h2>
             {hata && <p style={{ color: "red" }}>Hata: {hata}</p>}
             <ul className="list-group">
-                {/* {haberler.map((haber) => (
-                    <li key={haber.id} className="list-group-item d-flex justify-content-between align-items-center">
-                        {haber.konu} - {haber.icerik}
-                        <div>
-                            <Button variant="primary" onClick={() => handleShow(haber)}>
-                                Güncelle
-                            </Button>{" "}
-                            <Button variant="danger" onClick={() => handleShowDelete(haber)}>
-                                Sil
-                            </Button>
-                        </div>
-                    </li>
-                ))} */}
                 {haberler.map((haber) => (
                     <li key={haber.id} className="list-group-item d-flex justify-content-between align-items-center">
                         <div>
-                            <strong>{haber.konu}</strong> -<strong>{haber.icerik}</strong> -<strong>{haber.gecerlilikTarihi}</strong> - {haber.link}
+                            <strong>{haber.konu}</strong> -<strong>{haber.icerik}</strong> -<strong>{haber.gecerlilikTarihi}</strong>
                             <br />
-                            {haber.link && (
-                                <div>
-                                    <a href={haber.link} target="_blank" rel="noopener noreferrer">
-                                        Haberi Oku
-                                    </a>
-                                </div>
-                            )}
                         </div>
                         <div>
                             <Button variant="primary" onClick={() => handleShow(haber)}>
@@ -168,9 +148,8 @@ function AdminHaberler() {
                                 <Form.Label>Haber Linki</Form.Label>
                                 <Form.Control
                                     type="text"
-                                    value={seciliHaber.link}
+                                    value={"http://localhost:9090/api/haberler/" + seciliHaber.id}
                                     onChange={(e) => setSeciliHaber({ ...seciliHaber, link: e.target.value })}
-                                    placeholder="https://example.com/haber"
                                 />
                             </Form.Group>
                             <Button variant="success" type="submit">

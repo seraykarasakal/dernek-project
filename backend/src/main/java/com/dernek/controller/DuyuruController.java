@@ -2,7 +2,6 @@
 package com.dernek.controller;
 
 import com.dernek.model.Duyuru;
-import com.dernek.model.Haber;
 import com.dernek.repository.DuyuruRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.UrlResource;
@@ -25,9 +24,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/duyurular")
 @CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
-// @RestController
-// @RequestMapping("/api/duyurular")
-// @CrossOrigin(origins = "http://localhost:5173")
+
 public class DuyuruController {
 
     private static final String UPLOAD_DIR = "uploads/";
@@ -187,58 +184,3 @@ public ResponseEntity<Duyuru> updateDuyuru(@PathVariable Long id, @RequestBody D
         }
     }
 }
-//     @PostMapping("/ekle")
-//     public ResponseEntity<?> yeniDuyuruEkle(@RequestBody Duyuru duyuru) {
-//         try {
-//             if (duyuru.getResimUrl() != null && !duyuru.getResimUrl().isEmpty()) {
-//                 // Base64 verisini dosya sistemine kaydet
-//                 byte[] imageBytes = Base64.getDecoder().decode(duyuru.getResimUrl());
-
-//                 // Dosyanın MIME türünü belirle
-//                 Tika tika = new Tika();
-//                 String mimeType = tika.detect(imageBytes);
-//                 String extension;
-
-//                 switch (mimeType) {
-//                     case "image/jpeg":
-//                         extension = ".jpg";
-//                         break;
-//                     case "image/png":
-//                         extension = ".png";
-//                         break;
-//                     case "image/webp":
-//                         extension = ".webp";
-//                         break;
-//                     default:
-//                         return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-//                             .body("{\"error\": \"Desteklenmeyen dosya türü: " + mimeType + "\"}");
-//                 }
-
-//                 // Benzersiz dosya adı oluştur
-//                 String fileName = System.currentTimeMillis() + extension;
-//                 String filePath = UPLOAD_DIR + fileName;
-
-//                 // uploads klasörü yoksa oluştur
-//                 File uploadDir = new File(UPLOAD_DIR);
-//                 if (!uploadDir.exists()) {
-//                     uploadDir.mkdirs();
-//                 }
-
-//                 // Dosyayı kaydet
-//                 try (OutputStream os = new FileOutputStream(filePath)) {
-//                     os.write(imageBytes);
-//                 }
-
-//                 // Duyuru nesnesine dosya yolunu kaydet
-//                 duyuru.setResimUrl(filePath);
-//             }
-
-//             duyuruRepository.save(duyuru);
-//             return ResponseEntity.ok("{\"message\": \"Duyuru başarıyla eklendi\"}");
-
-//         } catch (Exception e) {
-//             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-//                     .body("{\"error\": \"Duyuru eklenirken hata oluştu: " + e.getMessage() + "\"}");
-//         }
-//     }
-// }

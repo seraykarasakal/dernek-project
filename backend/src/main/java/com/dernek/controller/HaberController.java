@@ -29,7 +29,7 @@ public class HaberController {
     @PostMapping
 public ResponseEntity<Haber> yeniHaberEkle(@RequestBody Haber haber) {
     try {
-        System.out.println("Gelen Haber Linki: " + haber.getLink()); // Link geliyor mu kontrol edin
+        System.out.println("Gelen Haber Linki: " + haber.getLink()); 
 
         Haber kaydedilenHaber = haberRepository.save(haber);
         return ResponseEntity.ok(kaydedilenHaber);
