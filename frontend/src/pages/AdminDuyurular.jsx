@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
+import Header from "../components/Header";
 
 function AdminDuyurular() {
     const [duyurular, setDuyurular] = useState([]);
@@ -20,6 +21,11 @@ function AdminDuyurular() {
             .then((data) => setDuyurular(data))
             .catch((error) => setHata(error.message));
     }, []);
+
+    const buttons = [
+        { label: "Haberler", variant: "primary", link: "/admin/haberler" },
+        { label: "Duyuru Ekle", variant: "success", link: "/admin/duyuru-ekle" },
+    ];
 
     // Güncelleme Modalını Aç
     const handleShow = (duyuru) => {
@@ -99,8 +105,63 @@ function AdminDuyurular() {
     };
 
     return (
-        <div className="container mt-3">
-            <h2>Duyurular</h2>
+        <>
+            <Header title="Admin Panel" subTitle="Duyurular" buttons={buttons} />
+
+            <div className="container mt-3">
+                {hata && <p style={{ color: "red" }}>Hata: {hata}</p>}
+                <div className="container">
+                    <div className="row">
+                        {duyurular.map((duyuru) => (
+                            <div key={duyuru.id} className=" col-md-6 col-lg-4 mb-4">
+                                <div
+                                    className="card shadow-sm "
+                                    style={{
+                                        width: "%40",
+                                        height: "500px",
+                                        overflow: "hidden",
+                                    }}
+                                >
+                                    <div className="d-flex flex-column" style={{ height: "100%" }}>
+                                        {/* Resim Solda */}
+                                        <img
+                                            src={`http://localhost:9090/api/duyurular/uploads/${duyuru.resimUrl.split("/").pop()}`}
+                                            alt="Duyuru Resmi"
+                                            className="img-fluid rounded "
+                                            style={{
+                                                height: "200px",
+                                                objectFit: "cover",
+                                            }}
+                                        />
+
+                                        {/* İçerik Sağda */}
+                                        <div className="card-body d-flex flex-column justify-content-between">
+                                            <div>
+                                                <h5 className="card-title">{duyuru.konu}</h5>
+                                                <p className="card-text" style={{ maxHeight: "200px", overflow: "hidden" }}>
+                                                    {duyuru.icerik}
+                                                </p>
+                                            </div>{" "}
+                                        </div>
+                                    </div>
+
+                                    <div className="card-footer d-flex justify-content-between align-items-center border-0 bg-transparent">
+                                        <small className="text-muted">{duyuru.gecerlilikTarihi}</small>
+                                        <div className="d-flex gap-2">
+                                            <Button variant="outline-primary" onClick={() => handleShow(duyuru)}>
+                                                <i className="bi bi-pencil-fill"></i> Güncelle
+                                            </Button>
+                                            <Button variant="outline-danger" onClick={() => handleShowDelete(duyuru)}>
+                                                <i className="bi bi-trash-fill"></i> Sil
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                {/* <h2>Duyurular</h2>
             {hata && <p style={{ color: "red" }}>Hata: {hata}</p>}
             <ul className="list-group">
                 {duyurular.map((duyuru) => (
@@ -131,82 +192,93 @@ function AdminDuyurular() {
                         </div>
                     </li>
                 ))}
-            </ul>
+            </ul> */}
+                {/* Güncelleme Modalı */}
+                <Modal show={show} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Duyuru Güncelle</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        {seciliDuyuru && (
+                            <Form onSubmit={handleUpdate}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Başlık</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        value={seciliDuyuru.konu}
+                                        onChange={(e) => setSeciliDuyuru({ ...seciliDuyuru, konu: e.target.value })}
+                                        required
+                                    />
+                                </Form.Group>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>İçerik</Form.Label>
+                                    <Form.Control
+                                        as="textarea"
+                                        rows={3}
+                                        value={seciliDuyuru.icerik}
+                                        onChange={(e) => setSeciliDuyuru({ ...seciliDuyuru, icerik: e.target.value })}
+                                        required
+                                    />
+                                </Form.Group>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Geçerlilik Tarihi</Form.Label>
+                                    <Form.Control
+                                        type="date"
+                                        value={seciliDuyuru.gecerlilikTarihi}
+                                        onChange={(e) =>
+                                            setSeciliDuyuru({
+                                                ...seciliDuyuru,
+                                                gecerlilikTarihi: e.target.value,
+                                            })
+                                        }
+                                        required
+                                    />
+                                </Form.Group>
 
-            {/* Güncelleme Modalı */}
-            <Modal show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Duyuru Güncelle</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {seciliDuyuru && (
-                        <Form onSubmit={handleUpdate}>
-                            <Form.Group className="mb-3">
-                                <Form.Label>Başlık</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    value={seciliDuyuru.konu}
-                                    onChange={(e) => setSeciliDuyuru({ ...seciliDuyuru, konu: e.target.value })}
-                                    required
-                                />
-                            </Form.Group>
-                            <Form.Group className="mb-3">
-                                <Form.Label>İçerik</Form.Label>
-                                <Form.Control
-                                    as="textarea"
-                                    rows={3}
-                                    value={seciliDuyuru.icerik}
-                                    onChange={(e) => setSeciliDuyuru({ ...seciliDuyuru, icerik: e.target.value })}
-                                    required
-                                />
-                            </Form.Group>
-                            <Form.Group className="mb-3">
-                                <Form.Label>Geçerlilik Tarihi</Form.Label>
-                                <Form.Control
-                                    type="date"
-                                    value={seciliDuyuru.gecerlilikTarihi}
-                                    onChange={(e) =>
-                                        setSeciliDuyuru({
-                                            ...seciliDuyuru,
-                                            gecerlilikTarihi: e.target.value,
-                                        })
-                                    }
-                                    required
-                                />
-                            </Form.Group>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Yeni Resim (Opsiyonel)</Form.Label>
+                                    <Form.Control type="file" accept="image/*" onChange={(e) => handleImageChange(e)} />
+                                </Form.Group>
 
-                            <Form.Group className="mb-3">
-                                <Form.Label>Yeni Resim (Opsiyonel)</Form.Label>
-                                <Form.Control type="file" accept="image/*" onChange={(e) => handleImageChange(e)} />
-                            </Form.Group>
-
-                            <Button variant="success" type="submit">
-                                Güncelle
-                            </Button>
-                        </Form>
-                    )}
-                </Modal.Body>
-            </Modal>
-
-            {/* Silme Onay Modalı */}
-            <Modal show={showDelete} onHide={handleCloseDelete}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Duyuruyu Sil</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <p>Bu duyuruyu silmek istediğinizden emin misiniz?</p>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseDelete}>
-                        İptal
-                    </Button>
-                    <Button variant="danger" onClick={handleDelete}>
-                        Sil
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        </div>
+                                <Button variant="success" type="submit">
+                                    Güncelle
+                                </Button>
+                            </Form>
+                        )}
+                    </Modal.Body>
+                </Modal>
+                {/* Silme Onay Modalı */}
+                <Modal show={showDelete} onHide={handleCloseDelete}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Duyuruyu Sil</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p>Bu duyuruyu silmek istediğinizden emin misiniz?</p>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleCloseDelete}>
+                            İptal
+                        </Button>
+                        <Button variant="danger" onClick={handleDelete}>
+                            Sil
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+            </div>
+        </>
     );
 }
 
 export default AdminDuyurular;
+{
+    /* <div className="d-flex flex-column justify-content-center align-items-end gap-2 p-2">
+                                    <div className="d-flex gap-2">
+                                        <Button variant="outline-primary" onClick={() => handleShow(duyuru)}>
+                                            <i className="bi bi-pencil-fill"></i> Güncelle
+                                        </Button>
+                                        <Button variant="outline-danger" onClick={() => handleShowDelete(duyuru)}>
+                                            <i className="bi bi-trash-fill"></i> Sil
+                                        </Button>
+                                    </div>
+                                </div> */
+}

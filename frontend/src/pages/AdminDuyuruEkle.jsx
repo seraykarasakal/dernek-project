@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Form } from "react-bootstrap";
-
+import Header from "../components/Header";
 function AdminDuyuruEkle() {
     const [konu, setKonu] = useState("");
     const [icerik, setIcerik] = useState("");
@@ -52,32 +52,38 @@ function AdminDuyuruEkle() {
             console.error("Ekleme hatası:", error);
         }
     };
-
+    const buttons = [
+        { label: "Duyurular", variant: "success", link: "/admin/duyurular" },
+        { label: "Haber Ekle", variant: "primary", link: "/admin/haber-ekle" },
+    ];
     return (
-        <div className="container mt-3">
-            <h2>Yeni Duyuru Ekle</h2>
-            <Form onSubmit={handleSubmit}>
-                <Form.Group className="mb-3">
-                    <Form.Label>Konu</Form.Label>
-                    <Form.Control type="text" value={konu} onChange={(e) => setKonu(e.target.value)} required />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label>İçerik</Form.Label>
-                    <Form.Control as="textarea" rows={3} value={icerik} onChange={(e) => setIcerik(e.target.value)} required />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label>Geçerlilik Tarihi</Form.Label>
-                    <Form.Control type="date" value={gecerlilikTarihi} onChange={(e) => setGecerlilikTarihi(e.target.value)} required />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label>Resim Seç </Form.Label>
-                    <Form.Control type="file" accept="image/jpeg, image/png, image/webp" onChange={(e) => setResim(e.target.files[0])} required />
-                </Form.Group>
-                <Button variant="success" type="submit">
-                    Ekle
-                </Button>
-            </Form>
-        </div>
+        <>
+            <Header title="Admin Panel" subTitle="Duyuru Ekle" buttons={buttons} />
+            <div className="container mt-3">
+                <h2>Yeni Duyuru Ekle</h2>
+                <Form onSubmit={handleSubmit}>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Konu</Form.Label>
+                        <Form.Control type="text" value={konu} onChange={(e) => setKonu(e.target.value)} required />
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>İçerik</Form.Label>
+                        <Form.Control as="textarea" rows={3} value={icerik} onChange={(e) => setIcerik(e.target.value)} required />
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Geçerlilik Tarihi</Form.Label>
+                        <Form.Control type="date" value={gecerlilikTarihi} onChange={(e) => setGecerlilikTarihi(e.target.value)} required />
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Resim Seç </Form.Label>
+                        <Form.Control type="file" accept="image/jpeg, image/png, image/webp" onChange={(e) => setResim(e.target.files[0])} required />
+                    </Form.Group>
+                    <Button variant="success" type="submit">
+                        Ekle
+                    </Button>
+                </Form>
+            </div>
+        </>
     );
 }
 
