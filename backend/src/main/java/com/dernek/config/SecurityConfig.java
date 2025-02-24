@@ -15,7 +15,7 @@ public class SecurityConfig {
                 .anyRequest().permitAll() //  Tüm isteklere izin ver
             )
             .csrf(csrf -> csrf.disable()) //  CSRF korumasını devre dışı bırak
-            .headers(headers -> headers.frameOptions(frame -> frame.disable())); // H2 Console gibi şeyler için gerekli olabilir
+            .headers(headers -> headers.frameOptions(frame -> frame.disable())); 
 
         return http.build();
     }
